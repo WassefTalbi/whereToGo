@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+
+  reclamationdb:
+    image: mysql:latest
+    container_name: mysql_reclamation
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: adminer
+      MYSQL_PASSWORD: root1
+      MYSQL_DATABASE: reclamation
+    ports:
+      - '3307:3306'
+    volumes:
+      - db_reclamation_data:/var/lib/mysql
+
+  actualitedb:
+    image: mysql:latest
+    container_name: mysql_actualite
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: adminer
+      MYSQL_PASSWORD: root1
+      MYSQL_DATABASE: actualite
+    ports:
+      - '3308:3306'
+    volumes:
+      - db_actualite_data:/var/lib/mysql
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.4
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - "8081:8081"
+    command:
+      - start-dev
+      - --features=declarative-ui
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: azurite
+    command: azurite-blob --blobHost 0.0.0.0
+    ports:
+      - '10000:10000'
+    volumes:
+      - azurite_data:/data
+
+volumes:
+  db_reclamation_data:
+  db_actualite_data:
+  keycloak_data:
+  azurite_data:
