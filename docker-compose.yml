@@ -1,7 +1,6 @@
 version: "3.8"
 
 services:
-
   reclamationdb:
     image: mysql:latest
     container_name: mysql_reclamation
@@ -15,6 +14,17 @@ services:
       - '3307:3306'
     volumes:
       - db_reclamation_data:/var/lib/mysql
+
+  phpmyadmin_reclamation:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin_reclamation
+    restart: always
+    environment:
+      PMA_HOST: reclamationdb
+      PMA_USER: adminer
+      PMA_PASSWORD: root1
+    ports:
+      - '8081:80'
 
   actualitedb:
     image: mysql:latest
@@ -30,6 +40,17 @@ services:
     volumes:
       - db_actualite_data:/var/lib/mysql
 
+  phpmyadmin_actualite:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin_actualite
+    restart: always
+    environment:
+      PMA_HOST: actualitedb
+      PMA_USER: adminer
+      PMA_PASSWORD: root1
+    ports:
+      - '8082:80'
+
   evenementdb:
     image: mysql:latest
     container_name: mysql_evenement
@@ -43,30 +64,34 @@ services:
       - '3309:3306'
     volumes:
       - db_evenement_data:/var/lib/mysql
+
+  phpmyadmin_evenement:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin_evenement
+    restart: always
+    environment:
+      PMA_HOST: evenementdb
+      PMA_USER: adminer
+      PMA_PASSWORD: root1
+    ports:
+      - '8083:80'
+
   keycloak:
     image: quay.io/keycloak/keycloak:24.0.4
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
     ports:
-      - "8081:8081"
+      - "9090:8080"
     command:
       - start-dev
       - --features=declarative-ui
     volumes:
       - keycloak_data:/opt/keycloak/data
 
-  azurite:
-    image: mcr.microsoft.com/azure-storage/azurite
-    container_name: azurite
-    command: azurite-blob --blobHost 0.0.0.0
-    ports:
-      - '10000:10000'
-    volumes:
-      - azurite_data:/data
-
 volumes:
   db_reclamation_data:
   db_actualite_data:
+  db_evenement_data:
   keycloak_data:
   azurite_data:
