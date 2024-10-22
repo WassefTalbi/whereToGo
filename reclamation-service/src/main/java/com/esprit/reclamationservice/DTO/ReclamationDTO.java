@@ -15,5 +15,5 @@ public class ReclamationDTO {
     @NotBlank(message = "description is required and cannot be blank.")
     @Size(min=12,message = "description length min is 3 and max is 25")
     private String description;
-    private Long idUser;
+
 }

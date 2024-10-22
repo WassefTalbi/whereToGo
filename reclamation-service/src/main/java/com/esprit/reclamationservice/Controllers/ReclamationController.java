@@ -2,6 +2,7 @@ package com.esprit.reclamationservice.Controllers;
 
 import com.esprit.reclamationservice.DTO.ReclamationDTO;
 import com.esprit.reclamationservice.Entities.Reclamation;
+import com.esprit.reclamationservice.Entities.ReclamationStatus;
 import com.esprit.reclamationservice.Services.ReclamationService;
 import com.esprit.reclamationservice.feignClient.UserClient;
 import com.esprit.reclamationservice.modal.User;
@@ -20,7 +21,7 @@ import java.util.Optional;
 public class ReclamationController {
 
         private final ReclamationService reclamationService;
-        private UserClient userClient;
+        private final UserClient userClient;
 
         @GetMapping("/all")
         public List<Reclamation> getAllReclamations() {
@@ -36,10 +37,12 @@ public class ReclamationController {
         @PostMapping("/create")
         public ResponseEntity<?> createReclamation(@RequestBody @Valid ReclamationDTO reclamationDTO) {
             try {
-                User user =userClient.getCurrentConnected();
-                return new ResponseEntity<>( reclamationService.createReclamation(reclamationDTO,user), HttpStatus.OK);
+                Long idUser=userClient.getCurrentConnected().getId();
+                return new ResponseEntity<>( reclamationService.createReclamation(reclamationDTO,idUser), HttpStatus.OK);
             }
             catch (Exception e) {
+                System.out.println("testing of create");
+                System.out.println(e.getMessage());
                 return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
@@ -54,12 +57,19 @@ public class ReclamationController {
                 return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
+    @PutMapping("/update/status/{idReclamation}")
+    public ResponseEntity<?> updateReclamationStatus(@PathVariable Long idReclamation, @RequestParam ReclamationStatus newStatus) {
+       try {
+            return new ResponseEntity<>(reclamationService.updateReclamationStatus(idReclamation, newStatus), HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>("Reclamation not found", HttpStatus.NOT_FOUND);
+        }
+    }
 
         @DeleteMapping("/delete/{id}")
         public ResponseEntity<?> deleteReclamation(@PathVariable Long id) {
             reclamationService.deleteReclamation(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
 
 }

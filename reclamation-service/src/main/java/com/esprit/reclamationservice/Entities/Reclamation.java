@@ -17,6 +17,8 @@ public class Reclamation {
     private LocalDate createDate;
     private LocalDate updateDate;
     private Long idUser;
+    @Enumerated(EnumType.STRING)
+    private ReclamationStatus status;
     @PrePersist
     public void prePersist() {
         this.createDate = LocalDate.now();
