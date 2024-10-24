@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/evenement_service" />
           </set>
         </option>
+        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/user-service" />
@@ -20,6 +21,7 @@
             <option value="$PROJECT_DIR$/user-service" />
           </set>
         </option>
+        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>
