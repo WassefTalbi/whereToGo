@@ -1,5 +1,6 @@
 package com.esprit.userservice.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,3 +32,4 @@ public class User {
     @JsonIgnore
     private List<Role> roles;
 }
+
