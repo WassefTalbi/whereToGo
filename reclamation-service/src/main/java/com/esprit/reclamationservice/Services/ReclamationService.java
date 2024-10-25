@@ -27,7 +27,7 @@ public class ReclamationService {
         return reclamationRepository.findById(id);
     }
 
-    public Reclamation createReclamation(ReclamationDTO reclamationDTO, Long idUser) {
+    public Reclamation createReclamation(ReclamationDTO reclamationDTO, String idUser) {
         Reclamation reclamation=new Reclamation();
         reclamation.setDescription(reclamationDTO.getDescription());
         reclamation.setTitre(reclamationDTO.getTitre());

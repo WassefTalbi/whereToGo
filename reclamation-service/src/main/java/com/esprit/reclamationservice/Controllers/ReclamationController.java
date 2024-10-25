@@ -37,7 +37,7 @@ public class ReclamationController {
         @PostMapping("/create")
         public ResponseEntity<?> createReclamation(@RequestBody @Valid ReclamationDTO reclamationDTO) {
             try {
-                Long idUser=userClient.getCurrentConnected().getId();
+                String idUser="edff-ttgf7-rrrp5";
                 return new ResponseEntity<>( reclamationService.createReclamation(reclamationDTO,idUser), HttpStatus.OK);
             }
             catch (Exception e) {

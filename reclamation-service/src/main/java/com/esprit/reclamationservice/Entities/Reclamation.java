@@ -16,7 +16,7 @@ public class Reclamation {
     private String description;
     private LocalDate createDate;
     private LocalDate updateDate;
-    private Long idUser;
+    private String idUser;
     @Enumerated(EnumType.STRING)
     private ReclamationStatus status;
     @PrePersist
