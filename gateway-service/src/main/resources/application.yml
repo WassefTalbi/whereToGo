@@ -14,30 +14,31 @@ spring:
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
       routes:
-        - id: ACTUALITE-SERVICE
-          uri: lb://actualite-service
-          predicates:
-            - Path= /**
-        - id: ETABLISSEMENT-SERVICE
-          uri: lb://etablissement-service
-          predicates:
-            - Path= /**
-        - id: EVENEMENT-SERVICE
-          uri: lb://evenement-service
-          predicates:
-            - Path= /**
-        - id: RECLAMATION-SERVICE
-          uri: lb://reclamation-service
-          predicates:
-            - Path= /**
-        - id: TRANSPORT-SERVICE
-          uri: lb://transport-service
-          predicates:
-            - Path= /**
         - id: USER-SERVICE
           uri: lb://user-service
           predicates:
-            - Path= /**
+            - Path= /user/**
+        - id: ACTUALITE-SERVICE
+          uri: lb://actualite-service
+          predicates:
+            - Path= /actualite/**
+        - id: ETABLISSEMENT-SERVICE
+          uri: lb://etablissement-service
+          predicates:
+            - Path= /etablissement/**
+        - id: EVENEMENT-SERVICE
+          uri: lb://evenement-service
+          predicates:
+            - Path= /evenement/**
+        - id: RECLAMATION-SERVICE
+          uri: lb://reclamation-service
+          predicates:
+            - Path= /reclamation/**
+        - id: TRANSPORT-SERVICE
+          uri: lb://transport-service
+          predicates:
+            - Path= /transport/**
+
       globalcors:
         cors-configurations:
           '[/**]':
@@ -54,3 +55,7 @@ eureka:
       defaultZone: http://localhost:8761/eureka
   instance:
     prefer-ip-address: true
+
+logging:
+  level:
+    org.springframework: DEBUG
