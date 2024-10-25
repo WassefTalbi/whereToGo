@@ -4,13 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
-
+import org.springframework.beans.factory.annotation.Value;
 
 
 @Slf4j
 public class KeycloakConfig {
 
-    static Keycloak keycloak = null;
+    private static Keycloak keycloak = null;
+
 
     public KeycloakConfig() {
     }
@@ -25,7 +26,7 @@ public class KeycloakConfig {
                     .username("super-admin")
                     .password("superadmin")
                     .clientId("login-app")
-                    .clientSecret("ut8UqI7udaJEJNm24Zw6lOOJ5VCZ1eqA")
+                    .clientSecret("B8CNAMfaplvu1ng5FFn7MUnmcCetR4Yk")
                     .build();
         }
         return keycloak;

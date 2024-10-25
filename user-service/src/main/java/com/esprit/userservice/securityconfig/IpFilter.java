@@ -22,10 +22,9 @@ public class IpFilter implements Filter {
 
 
         String apiGatewayIp = "192.168.56.1";
-        String localIpv4 = "127.0.0.1";
-        String localIpv6 = "0:0:0:0:0:0:0:1";
 
-        if (!(remoteAddr.equals(apiGatewayIp) || remoteAddr.equals(localIpv4) || remoteAddr.equals(localIpv6))) {
+
+        if (!(remoteAddr.equals(apiGatewayIp) )) {
             throw new ServletException("Direct access unauthorized");
         }
 

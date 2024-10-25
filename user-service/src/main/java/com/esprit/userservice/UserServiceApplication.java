@@ -28,7 +28,7 @@ public class UserServiceApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-       /*      Stream.of(RoleType.ADMIN, RoleType.USER)
+           Stream.of(RoleType.ADMIN, RoleType.USER)
             .forEach(roleType -> {
                Role role= new Role();
                role.setRoleType(roleType);
@@ -42,7 +42,7 @@ public class UserServiceApplication implements CommandLineRunner {
         admin.setPhone("28598395");
         admin.setRoles(List.of(role));
         admin.setPassword(passwordEncoder.encode("adminADMIN#1919"));
-       userRepository.save(admin);*/
+       userRepository.save(admin);
 
     }
 }

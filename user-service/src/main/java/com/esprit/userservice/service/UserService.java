@@ -16,6 +16,7 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,29 +30,26 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
+    @Value("${keycloak.client-secret}")
+    private String clientSecret;
     private final RestTemplate restTemplate;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
     public String login(AuthenticationRequest authenticationRequest) {
-
-        // Créez les en-têtes de la requête
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        // Créez le corps de la requête
         String body = "grant_type=password&username=" + authenticationRequest.getUsername() + "&password=" + authenticationRequest.getPassword() +
-                "&client_id=login-app&client_secret=ut8UqI7udaJEJNm24Zw6lOOJ5VCZ1eqA";
-        // Créez l'objet HttpEntity avec les en-têtes et le corps
+                "&client_id=login-app&client_secret="+clientSecret;
         HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
-        // Envoyez la requête POST
         ResponseEntity<String> responseEntity = restTemplate.exchange(
                 "http://localhost:9090/realms/whereToGo/protocol/openid-connect/token",
                 HttpMethod.POST,
                 requestEntity,
                 String.class
         );
-        // Récupérez la réponse
         String responseBody = responseEntity.getBody();
 
         return responseBody;
