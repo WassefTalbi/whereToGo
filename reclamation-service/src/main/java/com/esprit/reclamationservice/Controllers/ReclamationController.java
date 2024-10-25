@@ -10,6 +10,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,9 +38,9 @@ public class ReclamationController {
         }
 
         @PostMapping("/create")
-        public ResponseEntity<?> createReclamation(@RequestBody @Valid ReclamationDTO reclamationDTO) {
+        public ResponseEntity<?> createReclamation(@RequestBody @Valid ReclamationDTO reclamationDTO,@AuthenticationPrincipal Jwt jwt) {
             try {
-                String idUser="edff-ttgf7-rrrp5";
+                String idUser=jwt.getSubject();
                 return new ResponseEntity<>( reclamationService.createReclamation(reclamationDTO,idUser), HttpStatus.OK);
             }
             catch (Exception e) {
@@ -58,6 +61,7 @@ public class ReclamationController {
             }
         }
     @PutMapping("/update/status/{idReclamation}")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> updateReclamationStatus(@PathVariable Long idReclamation, @RequestParam ReclamationStatus newStatus) {
        try {
             return new ResponseEntity<>(reclamationService.updateReclamationStatus(idReclamation, newStatus), HttpStatus.OK);
