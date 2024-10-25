@@ -19,7 +19,7 @@ public class Comment implements Serializable {
     private Long id;
     private String content;
     private LocalDate dateComment;
-    private Long idUser;
+    private String idUser;
     @PrePersist
     protected void onCreate() {
         this.dateComment = LocalDate.now();

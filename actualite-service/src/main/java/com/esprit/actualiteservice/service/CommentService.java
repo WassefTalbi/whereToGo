@@ -22,19 +22,10 @@ public class CommentService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostExistsException("Post non trouvé pour cet ID :: " + postId));
         comment.setContent(actualitéDTO.getContent());
-        comment.setIdUser(user.getIdUser());
+        comment.setIdUser(user.getId());
         comment.setPost(post);
         return commentRepository.save(comment);
     }
-
-   /* public Comment createComment(Long postId, Comment comment) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostExistsException("Post non trouvé pour cet ID :: " + postId));
-        comment.setPost(post);
-
-        return commentRepository.save(comment);
-    }*/
-
     public List<Comment> getAllComments() {
         return commentRepository.findAll();
     }
