@@ -19,7 +19,7 @@ public class Post implements Serializable {
     private Long id;
     private String content;
     private LocalDate datePost;
-    private Long idUser;
+    private String idUser;
     @PrePersist
     protected void onCreate() {
         this.datePost = LocalDate.now();

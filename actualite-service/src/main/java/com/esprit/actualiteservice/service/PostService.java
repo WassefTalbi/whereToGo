@@ -1,15 +1,11 @@
 package com.esprit.actualiteservice.service;
-
 import com.esprit.actualiteservice.DTO.ActualitéDTO;
 import com.esprit.actualiteservice.exception.PostExistsException;
-import com.esprit.actualiteservice.modal.User;
 import com.esprit.actualiteservice.model.Post;
 import com.esprit.actualiteservice.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -17,7 +13,7 @@ import java.util.List;
 @Transactional
 public class PostService {
     private PostRepository postRepository;
-    public Post createPost(ActualitéDTO actualitéDTO, Long idUser) {
+    public Post createPost(ActualitéDTO actualitéDTO, String idUser) {
         Post post=new Post();
         post.setContent(actualitéDTO.getContent());
         post.setIdUser(idUser);

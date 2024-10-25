@@ -5,13 +5,13 @@ import com.esprit.actualiteservice.feignClient.UserClient;
 import com.esprit.actualiteservice.modal.User;
 import com.esprit.actualiteservice.model.Post;
 import com.esprit.actualiteservice.service.PostService;
+import feign.FeignException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,16 +26,20 @@ public class PostController {
     public ResponseEntity<Map<String, Object>> createPost(@RequestBody @Valid ActualitéDTO actualitéDTO) {
         Map<String, Object> response = new HashMap<>();
         try {
-            Long idUser =userClient.getCurrentConnected().getId();
+            String idUser = "rrrrrrr-hgu";
             Post createdPost = postService.createPost(actualitéDTO, idUser);
             response.put("message", "Post créé avec succès");
             response.put("post", createdPost);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (FeignException.NotFound ex) {
+            response.put("error", "Utilisateur non trouvé");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } catch (Exception ex) {
             response.put("error", "Erreur lors de la création du post");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
     @GetMapping("/getPosts")
     public ResponseEntity<Map<String, Object>> getAllPosts() {
         Map<String, Object> response = new HashMap<>();
