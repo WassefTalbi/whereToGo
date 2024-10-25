@@ -19,15 +19,10 @@ public class IpFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String remoteAddr = httpRequest.getRemoteAddr();
         System.out.println("remoteAddr: " + remoteAddr);
-
-
         String apiGatewayIp = "192.168.56.1";
-
-
         if (!(remoteAddr.equals(apiGatewayIp) )) {
             throw new ServletException("Direct access unauthorized");
         }
-
         chain.doFilter(request, response);
     }
 

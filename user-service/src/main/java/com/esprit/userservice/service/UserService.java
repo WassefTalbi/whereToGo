@@ -37,6 +37,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final RoleService roleService;
+    private final FileService fileService;
     private final PasswordEncoder passwordEncoder;
     public String login(AuthenticationRequest authenticationRequest) {
         HttpHeaders headers = new HttpHeaders();
@@ -55,7 +56,7 @@ public class UserService {
         return responseBody;
     }
 
-    public String createUser(RegisterRequest userDto) {
+    public String register(RegisterRequest userDto) {
         UserRepresentation userRep= mapUserRep(userDto);
         Keycloak keycloak = KeycloakConfig.getInstance();
         List<UserRepresentation> usernameRepresentations = keycloak.realm("whereToGo").users().searchByUsername(userDto.getEmail(),true);
@@ -74,6 +75,8 @@ public class UserService {
         user.setPhone(userDto.getMobileNumber());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setEmail(userDto.getEmail());
+        String photoName= fileService.uploadFile(userDto.getPhotoProfile());
+        user.setPhotoprofile(photoName);
         userRepository.save(user);
 
         if (response.getStatus() != 201) {
@@ -92,7 +95,45 @@ public class UserService {
 
 
     }
+    public String createOwner(RegisterRequest userDto) {
+        UserRepresentation userRep= mapUserRep(userDto);
+        Keycloak keycloak = KeycloakConfig.getInstance();
+        List<UserRepresentation> usernameRepresentations = keycloak.realm("whereToGo").users().searchByUsername(userDto.getEmail(),true);
+        List<UserRepresentation> emailRepresentations = keycloak.realm("whereToGo").users().searchByEmail(userDto.getEmail(),true);
 
+        if(!(usernameRepresentations.isEmpty() && emailRepresentations.isEmpty())){
+            throw new EmailExistsExecption("username or email already exists");
+        }
+        Response response = keycloak.realm("whereToGo").users().create(userRep);
+
+
+        Role role=roleRepository.findByRoleType(RoleType.USER).get();
+        User user=new User();
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setPhone(userDto.getMobileNumber());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setEmail(userDto.getEmail());
+        String photoName= fileService.uploadFile(userDto.getPhotoProfile());
+        user.setPhotoprofile(photoName);
+        userRepository.save(user);
+
+        if (response.getStatus() != 201) {
+            throw new RuntimeException("Failed to create user");
+        }
+        String userId = CreatedResponseUtil.getCreatedId(response);
+        System.out.println("userID est de createUser"+userId);
+        roleService.getRole(RoleType.USER);
+        roleService.assignRole(userId,RoleType.USER);
+        UserResource userResource = keycloak.realm("whereToGo").users().get(userId);
+        //   userResource.sendVerifyEmail();
+
+        return "User created";
+
+
+
+
+    }
     private UserRepresentation mapUserRep(RegisterRequest userDto) {
         UserRepresentation userRep = new UserRepresentation();
         userRep.setFirstName(userDto.getFirstName());

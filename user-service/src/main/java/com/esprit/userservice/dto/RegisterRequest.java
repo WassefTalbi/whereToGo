@@ -33,7 +33,7 @@ public class RegisterRequest {
     private String email;
     @ValidRoleType
     private String role;
-    //@NotNull(message = "Photo profile is required.")
+    @NotNull(message = "Photo profile is required.")
     private MultipartFile photoProfile;
 
 

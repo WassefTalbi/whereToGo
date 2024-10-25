@@ -49,14 +49,14 @@ public class UserController {
         return ResponseEntity.ok("response of testing current user auth "+jwt.getSubject());
     }
     @PostMapping("/singup")
-    public ResponseEntity<?> signup(  @RequestBody @Valid RegisterRequest userDto){
+    public ResponseEntity<?> signup(  @ModelAttribute @Valid RegisterRequest userDto){
 
-        return new ResponseEntity<>(userService.createUser(userDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.register(userDto), HttpStatus.CREATED);
     }
     @PostMapping("/addUser")
-    public ResponseEntity<?> adduser(  @RequestBody @Valid RegisterRequest userDto){
+    public ResponseEntity<?> addOwner(  @ModelAttribute @Valid RegisterRequest userDto){
 
-        return new ResponseEntity<>(userService.createUser(userDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.createOwner(userDto), HttpStatus.CREATED);
     }
 
 }
