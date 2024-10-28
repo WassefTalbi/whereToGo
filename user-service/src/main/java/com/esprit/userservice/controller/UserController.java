@@ -1,33 +1,63 @@
 package com.esprit.userservice.controller;
 
-import com.esprit.userservice.entity.User;
+import com.esprit.userservice.dto.AuthenticationRequest;
+import com.esprit.userservice.dto.RegisterRequest;
 import com.esprit.userservice.service.UserService;
-import lombok.AllArgsConstructor;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@AllArgsConstructor
+@Validated
 @RequestMapping("/user")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000")
+@RequiredArgsConstructor
 public class UserController {
-    private UserService userService;
-    @GetMapping("/all")
-    public List<User> getAllUsers(){
-        return userService.getAllUsers();
+
+   private final UserService userService ;
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody @Valid AuthenticationRequest authenticationRequest) {
+        String response = userService.login(authenticationRequest);
+        return ResponseEntity.ok(response);
     }
-    @GetMapping("/email/{email}")
-    public User getUserByEmail(@PathVariable(value = "email") String email){
-        return userService.getUserByEmail(email);
+    @GetMapping("/user-only")
+    @PreAuthorize("hasRole('user')")
+    public String getUserData() {
+        return "This is user data.";
     }
-    @GetMapping("/current-user")
-    public User getUserByEmail(){
-        User user=new User();
-        user.setId(1L);
-        user.setEmail("user@gmail.com");
-        user.setFirstName("user");
-        user.setLastName("user");
-        return user ;
+
+    @GetMapping("/admin-only")
+    @PreAuthorize("hasRole('admin')")
+    public String getAdminData() {
+        return "This is admin data.";
     }
+
+
+
+
+    @GetMapping("/current-user-connected")
+    public ResponseEntity<String> currentUserConnected(@AuthenticationPrincipal Jwt jwt) {
+
+        return ResponseEntity.ok("response of testing current user auth "+jwt.getSubject());
+    }
+    @PostMapping("/singup")
+    public ResponseEntity<?> signup(  @ModelAttribute @Valid RegisterRequest userDto){
+
+        return new ResponseEntity<>(userService.register(userDto), HttpStatus.CREATED);
+    }
+    @PostMapping("/addUser")
+    public ResponseEntity<?> addOwner(  @ModelAttribute @Valid RegisterRequest userDto){
+
+        return new ResponseEntity<>(userService.createOwner(userDto), HttpStatus.CREATED);
+    }
+
+
 }

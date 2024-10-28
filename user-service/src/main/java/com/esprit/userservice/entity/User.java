@@ -1,34 +1,35 @@
 package com.esprit.userservice.entity;
 
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Table(name = "app_user")
 @AllArgsConstructor
 @NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class User  {
+@Getter
+@Setter
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String email;
+    private int id ;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String username;
+    private String photoprofile;
+    private String phone;
     @JsonIgnore
-    String password;
-    String firstName;
-    String lastName;
-    String phone;
-    private Boolean nonLocked;
-    private Boolean enabled;
-    private String photoProfile;
-
-
-
-
-
+    private String password;
+    @ManyToMany
+    @JsonIgnore
+    private List<Role> roles;
 }
+
