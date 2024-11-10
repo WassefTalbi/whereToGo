@@ -9,11 +9,12 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+
 @Repository
 public interface EvenementRepository extends JpaRepository<Evenement, Long> {
     @Modifying
     @Query("DELETE FROM Evenement e WHERE e.eventDate = ?1 AND e.hour = ?2")
     void deleteByEventDateAndHour(LocalDate eventDate, LocalTime eventTime);
 
-
+    List<Evenement> findByEventDateAndHour(LocalDate eventDate, LocalTime eventTime);
 }
