@@ -17,11 +17,11 @@ spring:
         - id: USER-SERVICE
           uri: lb://user-service
           predicates:
-            - Path= /user/**
+            - Path= /user/** ,/auth/**
         - id: ACTUALITE-SERVICE
           uri: lb://actualite-service
           predicates:
-            - Path= /actualite/**
+            - Path= /**
         - id: ETABLISSEMENT-SERVICE
           uri: lb://etablissement-service
           predicates:
