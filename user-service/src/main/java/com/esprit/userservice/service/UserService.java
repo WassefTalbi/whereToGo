@@ -58,6 +58,7 @@ public class UserService {
     }
 
     public String register(RegisterRequest userDto) {
+        System.out.println("testing user dto display"+userDto.getFirstName());
         UserRepresentation userRep= mapUserRep(userDto);
         Keycloak keycloak = KeycloakConfig.getInstance();
         List<UserRepresentation> usernameRepresentations = keycloak.realm("whereToGo").users().searchByUsername(userDto.getEmail(),true);
@@ -97,6 +98,7 @@ public class UserService {
 
     }
     public String createOwner(RegisterRequest userDto) {
+        System.out.println(" user dto display"+userDto.getFirstName()+userDto.getEmail() );
         UserRepresentation userRep= mapUserRep(userDto);
         Keycloak keycloak = KeycloakConfig.getInstance();
         List<UserRepresentation> usernameRepresentations = keycloak.realm("whereToGo").users().searchByUsername(userDto.getEmail(),true);
@@ -142,7 +144,7 @@ public class UserService {
         userRep.setLastName(userDto.getLastName());
         userRep.setEmail(userDto.getEmail());
         userRep.setEnabled(true);
-        userRep.setEmailVerified(false);
+        userRep.setEmailVerified(true);
 
         Map<String, List<String>> attributes = new HashMap<>();
         if (userDto.getMobileNumber() != null) {

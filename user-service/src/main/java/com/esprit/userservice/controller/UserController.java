@@ -17,12 +17,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Validated
 @RequestMapping("/user")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 public class UserController {
 
    private final UserService userService ;
-
+    @GetMapping("/test")
+    public String test() {
+        return "display test data.";
+    }
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody @Valid AuthenticationRequest authenticationRequest) {
         String response = userService.login(authenticationRequest);
