@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class RegisterRequest {
     @Valid
 
-
     @NotBlank(message = "first name  is required and cannot be blank.")
     @Size(min=3,max = 25,message = "first name length min is 3 and max is 25")
     private String firstName;
@@ -31,8 +30,6 @@ public class RegisterRequest {
     @NotBlank(message = "email is required and cannot be blank.")
     @Column(unique = true)
     private String email;
-    @ValidRoleType
-    private String role;
     @NotNull(message = "Photo profile is required.")
     private MultipartFile photoProfile;
 
