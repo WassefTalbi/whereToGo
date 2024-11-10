@@ -28,21 +28,25 @@ public class UserServiceApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-           Stream.of(RoleType.ADMIN, RoleType.USER)
-            .forEach(roleType -> {
-               Role role= new Role();
-               role.setRoleType(roleType);
-               roleRepository.save(role);
-            });
-       User admin=new User();
-        Role role=roleRepository.findByRoleType(RoleType.ADMIN).get();
-        admin.setFirstName("admin");
-        admin.setLastName("admin");
-        admin.setEmail("admin@1waydev.tn");
-        admin.setPhone("28598395");
-        admin.setRoles(List.of(role));
-        admin.setPassword(passwordEncoder.encode("adminADMIN#1919"));
-       userRepository.save(admin);
+
+        if (roleRepository.count() == 0) {
+            Stream.of(RoleType.ADMIN, RoleType.USER,RoleType.OWNER)
+                    .forEach(roleType -> {
+                        Role role= new Role();
+                        role.setRoleType(roleType);
+                        roleRepository.save(role);
+                    });
+            User admin=new User();
+            Role role=roleRepository.findByRoleType(RoleType.ADMIN).get();
+            admin.setFirstName("admin");
+            admin.setLastName("admin");
+            admin.setEmail("admin@1waydev.tn");
+            admin.setPhone("28598395");
+            admin.setRoles(List.of(role));
+            admin.setPassword(passwordEncoder.encode("adminADMIN#1919"));
+            userRepository.save(admin);
+
+        }
 
     }
 }

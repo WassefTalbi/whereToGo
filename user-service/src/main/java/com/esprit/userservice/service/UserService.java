@@ -1,8 +1,7 @@
 package com.esprit.userservice.service;
 
 
-import com.esprit.userservice.dto.AuthenticationRequest;
-import com.esprit.userservice.dto.RegisterRequest;
+import com.esprit.userservice.dto.*;
 import com.esprit.userservice.entity.Role;
 import com.esprit.userservice.entity.RoleType;
 import com.esprit.userservice.entity.User;
@@ -10,6 +9,7 @@ import com.esprit.userservice.exception.EmailExistsExecption;
 import com.esprit.userservice.repository.RoleRepository;
 import com.esprit.userservice.repository.UserRepository;
 import com.esprit.userservice.securityconfig.KeycloakConfig;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.CreatedResponseUtil;
@@ -21,12 +21,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -96,11 +98,11 @@ public class UserService {
 
 
     }
-    public String createOwner(RegisterRequest userDto) {
-        UserRepresentation userRep= mapUserRep(userDto);
+    public String createOwner(OwnerRequest ownerRequest) {
+        UserRepresentation userRep= mapOwnerRep(ownerRequest);
         Keycloak keycloak = KeycloakConfig.getInstance();
-        List<UserRepresentation> usernameRepresentations = keycloak.realm("whereToGo").users().searchByUsername(userDto.getEmail(),true);
-        List<UserRepresentation> emailRepresentations = keycloak.realm("whereToGo").users().searchByEmail(userDto.getEmail(),true);
+        List<UserRepresentation> usernameRepresentations = keycloak.realm("whereToGo").users().searchByUsername(ownerRequest.getEmail(),true);
+        List<UserRepresentation> emailRepresentations = keycloak.realm("whereToGo").users().searchByEmail(ownerRequest.getEmail(),true);
 
         if(!(usernameRepresentations.isEmpty() && emailRepresentations.isEmpty())){
             throw new EmailExistsExecption("username or email already exists");
@@ -108,14 +110,16 @@ public class UserService {
         Response response = keycloak.realm("whereToGo").users().create(userRep);
 
 
-        Role role=roleRepository.findByRoleType(RoleType.USER).get();
+        Role role=roleRepository.findByRoleType(RoleType.OWNER).get();
         User user=new User();
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setPhone(userDto.getMobileNumber());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setEmail(userDto.getEmail());
-        String photoName= fileService.uploadFile(userDto.getPhotoProfile());
+        user.setFirstName(ownerRequest.getName());
+        user.setAddress(ownerRequest.getAddress());
+        user.setDescription(ownerRequest.getDescription());
+        user.setSinceYear(ownerRequest.getSinceYear());
+        user.setPhone(ownerRequest.getMobileNumber());
+        user.setPassword(passwordEncoder.encode(ownerRequest.getPassword()));
+        user.setEmail(ownerRequest.getEmail());
+        String photoName= fileService.uploadFile(ownerRequest.getLogo());
         user.setPhotoprofile(photoName);
         userRepository.save(user);
 
@@ -123,7 +127,7 @@ public class UserService {
             throw new RuntimeException("Failed to create user");
         }
         String userId = CreatedResponseUtil.getCreatedId(response);
-        System.out.println("userID est de createUser"+userId);
+
         roleService.getRole(RoleType.USER);
         roleService.assignRole(userId,RoleType.USER);
         UserResource userResource = keycloak.realm("whereToGo").users().get(userId);
@@ -163,14 +167,49 @@ public class UserService {
         }
         return userRep;
     }
+    private UserRepresentation mapOwnerRep(OwnerRequest ownerRequest) {
+        UserRepresentation userRep = new UserRepresentation();
+        userRep.setFirstName(ownerRequest.getName());
+        userRep.setUsername(ownerRequest.getEmail());
+        userRep.setEmail(ownerRequest.getEmail());
+        userRep.setEnabled(true);
+        userRep.setEmailVerified(true);
 
+          Map<String, List<?>> attributes = new HashMap<>();
+
+            List<String> mobileNumber = new ArrayList<>();
+            mobileNumber.add(ownerRequest.getMobileNumber());
+            attributes.put("mobileNumber", mobileNumber);
+
+            List<String> description = new ArrayList<>();
+            description.add(ownerRequest.getDescription());
+            attributes.put("description", description);
+
+            List<String> address = new ArrayList<>();
+            address.add(ownerRequest.getAddress());
+            attributes.put("address", address);
+
+         /*   List<Integer> sinceYear = new ArrayList<>();
+            sinceYear.add(ownerRequest.getSinceYear());
+            attributes.put("sinceYear", sinceYear);
+             userRep.setAttributes(attributes);*/
+
+
+            List<CredentialRepresentation> creds = new ArrayList<>();
+            CredentialRepresentation cred = new CredentialRepresentation();
+            cred.setTemporary(false);
+            cred.setType(CredentialRepresentation.PASSWORD);
+            cred.setValue(ownerRequest.getPassword());
+            creds.add(cred);
+            userRep.setCredentials(creds);
+
+        return userRep;
+    }
     public void forgotPassword(String email) {
         Keycloak keycloak = KeycloakConfig.getInstance();
         List<UserRepresentation> emailRepresentations = keycloak.realm("whereToGo").users().searchByEmail(email,true);
-        System.out.println("********test0******** "+emailRepresentations);
         if (!emailRepresentations.isEmpty()) {
-            UserRepresentation userRepresentation = emailRepresentations.get(0); // Get the first user
-            System.out.println("********test1******** "+userRepresentation);
+            UserRepresentation userRepresentation = emailRepresentations.get(0);
 
             try {
                 UserResource userResource = keycloak.realm("pfe").users().get(userRepresentation.getId());
@@ -189,6 +228,65 @@ public class UserService {
         }
     }
 
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email " + email));
+    }
+
+
+    public List<User>findAllOwner( ){
+        List<User> agencies = userRepository.findByRolesRoleType(RoleType.OWNER);
+        return agencies;
+    }
+    public List<User>findAllClient( ){
+        List<User> clients = userRepository.findByRolesRoleType(RoleType.USER);
+        return clients;
+    }
+
+
+    public User findUserById(Long idUser){
+        Optional<User> user= userRepository.findById(idUser);
+        if (!user.isPresent()){
+            throw new NotFoundException("no user found");
+        }
+        return user.get();
+    }
+
+    public void deleteUser(Long idUser){
+        User user= userRepository.findById(idUser).orElseThrow(()->new NotFoundException(" no user found"));
+        userRepository.deleteById(idUser);
+    }
+
+    public User profileManage(ProfileRequest profileRequest, String email) {
+
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+
+            user.setFirstName(profileRequest.getFirstName());
+            user.setLastName(profileRequest.getLastName());
+            user.setPhone(profileRequest.getMobileNumber());
+            user.setEmail(profileRequest.getEmail());
+            return userRepository.save(user);
+
+    }
+    public User profileOwnerManage(ProfileOwnerRequest profileRequest, String email) {
+
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+
+            user.setName(profileRequest.getName());
+            user.setPhone(profileRequest.getMobileNumber());
+            user.setEmail(profileRequest.getEmail());
+            return userRepository.save(user);
+
+    }
+
+    public void uploadProfilePicture(String email,String filePath){
+        User user = getUserByEmail(email);
+        user.setPhotoprofile(filePath);
+        userRepository.save(user);
+    }
 }
 
 
