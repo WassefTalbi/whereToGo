@@ -9,12 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/event")
-@CrossOrigin(origins = "http://localhost:4200")
-
+@RequestMapping("/evenement")
 public class EvenementController {
     @Autowired
-    EventService sevent;
+    private EventService sevent;
 
 
     @PostMapping("/add")
