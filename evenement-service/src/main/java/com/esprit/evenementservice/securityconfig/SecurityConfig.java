@@ -1,4 +1,4 @@
-package com.esprit.userservice.securityconfig;
+package com.esprit.evenementservice.securityconfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -28,18 +28,16 @@ public class SecurityConfig {
         return http
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(Arrays.asList("*"));
+                    config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
                     config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(Arrays.asList("*"));
-                   // config.setAllowCredentials(true);
+                    config.setAllowCredentials(true);
                     return config;
                 }))
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
 
-
-                .authorizeHttpRequests(a -> a.requestMatchers("/auth/login","/user/test").permitAll())
-
+                .authorizeHttpRequests(a -> a.requestMatchers("/user/login","/user/addUser","/user/admin-only").permitAll())
 
                 .authorizeHttpRequests(a -> a.anyRequest().authenticated())
                 .oauth2ResourceServer(ors -> ors.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)))

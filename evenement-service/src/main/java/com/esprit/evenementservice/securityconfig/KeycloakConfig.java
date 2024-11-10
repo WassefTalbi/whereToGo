@@ -1,10 +1,9 @@
-package com.esprit.userservice.securityconfig;
+package com.esprit.evenementservice.securityconfig;
 
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
-import org.springframework.beans.factory.annotation.Value;
 
 
 @Slf4j

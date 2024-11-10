@@ -30,6 +30,7 @@ public class RegisterRequest {
     @NotBlank(message = "email is required and cannot be blank.")
     @Column(unique = true)
     private String email;
+
     @NotNull(message = "Photo profile is required.")
     private MultipartFile photoProfile;
 

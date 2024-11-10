@@ -46,7 +46,7 @@ public class UserServiceApplication implements CommandLineRunner {
             admin.setPassword(passwordEncoder.encode("adminADMIN#1919"));
             userRepository.save(admin);
 
-        }
 
+        }
     }
 }
