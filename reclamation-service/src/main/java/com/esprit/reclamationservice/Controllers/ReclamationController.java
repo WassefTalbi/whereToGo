@@ -30,7 +30,10 @@ public class ReclamationController {
         public List<Reclamation> getAllReclamations() {
             return reclamationService.getAllReclamations();
         }
-
+        @GetMapping("/{idUser}")
+        public List<Reclamation> getReclamationsByIdUser(@PathVariable String idUser) {
+            return reclamationService.MyReclamations(idUser);
+        }
         @GetMapping("/findbyid/{id}")
         public ResponseEntity<?> getReclamationById(@PathVariable Long id) {
             Optional<Reclamation> reclamation = reclamationService.getReclamationById(id);
