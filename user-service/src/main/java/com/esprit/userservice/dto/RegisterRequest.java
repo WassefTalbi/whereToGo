@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class RegisterRequest {
     @Valid
 
-
     @NotBlank(message = "first name  is required and cannot be blank.")
     @Size(min=3,max = 25,message = "first name length min is 3 and max is 25")
     private String firstName;

@@ -28,6 +28,7 @@ public class UserServiceApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
         if (roleRepository.count() == 0) {
             Stream.of(RoleType.ADMIN, RoleType.USER,RoleType.OWNER)
                     .forEach(roleType -> {
@@ -44,6 +45,7 @@ public class UserServiceApplication implements CommandLineRunner {
             admin.setRoles(List.of(role));
             admin.setPassword(passwordEncoder.encode("adminADMIN#1919"));
             userRepository.save(admin);
+
 
         }
     }

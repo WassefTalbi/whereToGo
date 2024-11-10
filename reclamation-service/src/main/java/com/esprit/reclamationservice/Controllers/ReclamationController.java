@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/reclamations")
+@RequestMapping("/reclamation")
 @RequiredArgsConstructor
 public class ReclamationController {
 

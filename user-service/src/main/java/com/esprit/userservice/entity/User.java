@@ -22,10 +22,14 @@ public class User {
     private int id ;
     private String firstName;
     private String lastName;
+    private String name;
     private String email;
     private String username;
     private String photoprofile;
     private String phone;
+    private String address;
+    private Integer sinceYear;
+    private String description;
     @JsonIgnore
     private String password;
     @ManyToMany
