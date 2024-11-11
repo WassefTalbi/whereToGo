@@ -22,6 +22,9 @@ public class ReclamationService {
     public List<Reclamation> getAllReclamations() {
         return reclamationRepository.findAll();
     }
+    public List<Reclamation> MyReclamations(String idUser) {
+        return reclamationRepository.findByIdUser(idUser);
+    }
 
     public Optional<Reclamation> getReclamationById(Long id) {
         return reclamationRepository.findById(id);
@@ -38,6 +41,7 @@ public class ReclamationService {
 
         return reclamationRepository.save(reclamation);
     }
+
     public Reclamation updateReclamation(Long id, ReclamationDTO reclamationDTO){
         if(id==null){
             throw new NotFoundException(" id must not be null");

@@ -12,8 +12,8 @@
         <module name="evenement-service" />
         <module name="gateway-service" />
         <module name="actualite-service" />
-        <module name="user-service" />
         <module name="transport-service" />
+        <module name="user-service" />
         <module name="discovery-service" />
       </profile>
     </annotationProcessing>

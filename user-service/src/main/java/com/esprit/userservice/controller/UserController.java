@@ -28,11 +28,14 @@ import java.util.Map;
 @RestController
 @Validated
 @RequestMapping("/user")
+
 @CrossOrigin("*")
+
 @RequiredArgsConstructor
 public class UserController {
 
    private final UserService userService ;
+
    private final FileService fileService;
 
     @GetMapping("/email/{email}")
@@ -51,6 +54,7 @@ public class UserController {
     @GetMapping("/test")
     public String test() {
         return "This is user data.";
+
     }
     @GetMapping("/user-only")
     @PreAuthorize("hasRole('user')")

@@ -21,7 +21,7 @@ spring:
         - id: ACTUALITE-SERVICE
           uri: lb://actualite-service
           predicates:
-            - Path= /actualite/**
+            - Path= /comments/** ,/posts/**
         - id: ETABLISSEMENT-SERVICE
           uri: lb://etablissement-service
           predicates:

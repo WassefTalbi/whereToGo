@@ -24,7 +24,9 @@ public class KeycloakConfig {
                     .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
 
                     .clientId("login-app")
-                    .clientSecret("B8CNAMfaplvu1ng5FFn7MUnmcCetR4Yk")
+
+                    .clientSecret("KCkLConBOMbkIsOjEnWBmzokgUHE1hzn")
+
                     .build();
             keycloak.tokenManager().getAccessToken();
         }
