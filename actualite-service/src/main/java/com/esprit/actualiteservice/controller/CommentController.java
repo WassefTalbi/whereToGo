@@ -19,6 +19,7 @@ import java.util.Map;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/comments")
+@CrossOrigin("*")
 public class CommentController {
     private final CommentService commentService;
     private UserClient userClient;

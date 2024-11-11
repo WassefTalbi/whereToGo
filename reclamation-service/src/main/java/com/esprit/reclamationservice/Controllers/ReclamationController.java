@@ -21,6 +21,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/reclamation")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class ReclamationController {
 
         private final ReclamationService reclamationService;
@@ -30,8 +31,9 @@ public class ReclamationController {
         public List<Reclamation> getAllReclamations() {
             return reclamationService.getAllReclamations();
         }
-        @GetMapping("/{idUser}")
-        public List<Reclamation> getReclamationsByIdUser(@PathVariable String idUser) {
+        @GetMapping("/myreclamation")
+        public List<Reclamation> getReclamationsByIdUser(@AuthenticationPrincipal Jwt jwt) {
+            String idUser =jwt.getSubject() ;
             return reclamationService.MyReclamations(idUser);
         }
         @GetMapping("/findbyid/{id}")
@@ -65,7 +67,7 @@ public class ReclamationController {
         }
     @PutMapping("/update/status/{idReclamation}")
     @PreAuthorize("hasRole('admin')")
-    public ResponseEntity<?> updateReclamationStatus(@PathVariable Long idReclamation, @RequestParam ReclamationStatus newStatus) {
+    public ResponseEntity<?> updateReclamationStatus(@PathVariable Long idReclamation, @RequestParam("ReclamationStatus")  ReclamationStatus newStatus) {
        try {
             return new ResponseEntity<>(reclamationService.updateReclamationStatus(idReclamation, newStatus), HttpStatus.OK);
         } catch (Exception e){

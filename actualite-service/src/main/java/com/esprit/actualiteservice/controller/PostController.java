@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
@@ -19,14 +21,16 @@ import java.util.Map;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/posts")
+@CrossOrigin("*")
 public class PostController {
     private PostService postService;
     private UserClient userClient;
     @PostMapping("/addPost")
-    public ResponseEntity<Map<String, Object>> createPost(@RequestBody @Valid ActualitéDTO actualitéDTO) {
+
+    public ResponseEntity<Map<String, Object>> createPost(@RequestBody @Valid ActualitéDTO actualitéDTO , @AuthenticationPrincipal Jwt jwt) {
         Map<String, Object> response = new HashMap<>();
         try {
-            String idUser = "rrrrrrr-hgu";
+            String idUser = jwt.getSubject();
             Post createdPost = postService.createPost(actualitéDTO, idUser);
             response.put("message", "Post créé avec succès");
             response.put("post", createdPost);
