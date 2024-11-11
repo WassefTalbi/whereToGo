@@ -21,13 +21,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 @Service
@@ -62,16 +57,32 @@ public class UserService {
     public String register(RegisterRequest userDto) {
         UserRepresentation userRep= mapUserRep(userDto);
         Keycloak keycloak = KeycloakConfig.getInstance();
-        List<UserRepresentation> usernameRepresentations = keycloak.realm("whereToGo").users().searchByUsername(userDto.getEmail(),true);
+        UserRepresentation userrep = new UserRepresentation();
+        userrep.setUsername(userDto.getEmail());
+        userrep.setEmail(userDto.getEmail());
+        userrep.setEnabled(true);
+
+// Optional: Set additional attributes, e.g., first and last name
+        userrep.singleAttribute("firstName", userDto.getFirstName());
+        userrep.singleAttribute("lastName", userDto.getLastName());
+
+        try {
+            keycloak.realm("whereToGo").users().create(userrep);
+        } catch (Exception e) {
+            System.out.println("Failed to create user: "+ e);
+            throw e;
+        }
+
+      /*  List<UserRepresentation> usernameRepresentations = keycloak.realm("whereToGo").users().searchByUsername(userDto.getEmail(),true);
         List<UserRepresentation> emailRepresentations = keycloak.realm("whereToGo").users().searchByEmail(userDto.getEmail(),true);
 
         if(!(usernameRepresentations.isEmpty() && emailRepresentations.isEmpty())){
             throw new EmailExistsExecption("username or email already exists");
-        }
+        }*/
         Response response = keycloak.realm("whereToGo").users().create(userRep);
 
 
-        Role role=roleRepository.findByRoleType(RoleType.USER).get();
+        Role role=roleRepository.findByRoleType(RoleType.user).get();
         User user=new User();
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
@@ -87,8 +98,8 @@ public class UserService {
         }
         String userId = CreatedResponseUtil.getCreatedId(response);
         System.out.println("userID est de createUser"+userId);
-        roleService.getRole(RoleType.USER);
-        roleService.assignRole(userId,RoleType.USER);
+        roleService.getRole(RoleType.user);
+        roleService.assignRole(userId,RoleType.user);
         UserResource userResource = keycloak.realm("whereToGo").users().get(userId);
         //   userResource.sendVerifyEmail();
 
@@ -110,7 +121,7 @@ public class UserService {
         Response response = keycloak.realm("whereToGo").users().create(userRep);
 
 
-        Role role=roleRepository.findByRoleType(RoleType.OWNER).get();
+        Role role=roleRepository.findByRoleType(RoleType.owner).get();
         User user=new User();
         user.setFirstName(ownerRequest.getName());
         user.setAddress(ownerRequest.getAddress());
@@ -128,8 +139,8 @@ public class UserService {
         }
         String userId = CreatedResponseUtil.getCreatedId(response);
 
-        roleService.getRole(RoleType.USER);
-        roleService.assignRole(userId,RoleType.USER);
+        roleService.getRole(RoleType.user);
+        roleService.assignRole(userId,RoleType.user);
         UserResource userResource = keycloak.realm("whereToGo").users().get(userId);
         //   userResource.sendVerifyEmail();
 
@@ -212,7 +223,7 @@ public class UserService {
             UserRepresentation userRepresentation = emailRepresentations.get(0);
 
             try {
-                UserResource userResource = keycloak.realm("pfe").users().get(userRepresentation.getId());
+                UserResource userResource = keycloak.realm("whereToGo").users().get(userRepresentation.getId());
                 List<String> actions = new ArrayList<>();
                 actions.add("UPDATE_PASSWORD");
                 userResource.executeActionsEmail(actions);
@@ -236,11 +247,11 @@ public class UserService {
 
 
     public List<User>findAllOwner( ){
-        List<User> agencies = userRepository.findByRolesRoleType(RoleType.OWNER);
+        List<User> agencies = userRepository.findByRolesRoleType(RoleType.owner);
         return agencies;
     }
     public List<User>findAllClient( ){
-        List<User> clients = userRepository.findByRolesRoleType(RoleType.USER);
+        List<User> clients = userRepository.findByRolesRoleType(RoleType.owner);
         return clients;
     }
 

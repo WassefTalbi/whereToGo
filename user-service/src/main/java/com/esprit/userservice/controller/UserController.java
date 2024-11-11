@@ -35,6 +35,14 @@ public class UserController {
    private final UserService userService ;
    private final FileService fileService;
 
+    @GetMapping("/email/{email}")
+    public User getUserByEmail(@PathVariable(value = "email") String email){
+        return userService.getUserByEmail(email);
+    }
+    @GetMapping("/findById/{idUser}")
+    public User findUserById(@PathVariable(value = "idUser") Long idUser){
+        return userService.findUserById(idUser);
+    }
     @PostMapping("/register-Owner")
     public ResponseEntity<?> addOwner(  @ModelAttribute @Valid OwnerRequest ownerRequest){
 
