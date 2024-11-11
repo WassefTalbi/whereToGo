@@ -30,14 +30,14 @@ public class UserServiceApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         if (roleRepository.count() == 0) {
-            Stream.of(RoleType.ADMIN, RoleType.USER,RoleType.OWNER)
+            Stream.of(RoleType.admin, RoleType.user,RoleType.owner)
                     .forEach(roleType -> {
                         Role role= new Role();
                         role.setRoleType(roleType);
                         roleRepository.save(role);
                     });
             User admin=new User();
-            Role role=roleRepository.findByRoleType(RoleType.ADMIN).get();
+            Role role=roleRepository.findByRoleType(RoleType.admin).get();
             admin.setFirstName("admin");
             admin.setLastName("admin");
             admin.setEmail("admin@1waydev.tn");

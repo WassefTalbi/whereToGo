@@ -10,7 +10,6 @@ public class IpFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        System.out.println("testing into the init of filter");
     }
 
     @Override
