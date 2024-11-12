@@ -29,7 +29,7 @@ public class AuthController {
     }
 
     @PostMapping("/singup")
-    public ResponseEntity<?> signup(  @RequestBody @Valid RegisterRequest userDto){
+    public ResponseEntity<?> signup( @ModelAttribute @Valid RegisterRequest userDto){
 
         return new ResponseEntity<>(userService.register(userDto), HttpStatus.CREATED);
     }

@@ -20,6 +20,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id ;
+    private String keycloakId;
     private String firstName;
     private String lastName;
     private String name;
@@ -32,8 +33,8 @@ public class User {
     private String description;
     @JsonIgnore
     private String password;
-    @ManyToMany
+    @ManyToOne
     @JsonIgnore
-    private List<Role> roles;
+    private Role role;
 }
 

@@ -76,6 +76,32 @@ services:
     ports:
       - '8083:80'
 
+
+  userdb:
+    image: mysql:latest
+    container_name: mysql_user
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: adminer
+      MYSQL_PASSWORD: root1
+      MYSQL_DATABASE: user
+    ports:
+      - '3310:3306'
+    volumes:
+      - db_user_data:/var/lib/mysql
+
+  phpmyadmin_user:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin_user_v2
+    restart: always
+    environment:
+      PMA_HOST: userdb
+      PMA_USER: adminer
+      PMA_PASSWORD: root1
+    ports:
+      - '8084:80'
+
   keycloak:
     image: quay.io/keycloak/keycloak:24.0.4
     environment:
@@ -93,5 +119,6 @@ volumes:
   db_reclamation_data:
   db_actualite_data:
   db_evenement_data:
+  db_user_data:
   keycloak_data:
   azurite_data:

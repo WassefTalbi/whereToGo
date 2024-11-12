@@ -101,7 +101,7 @@ public class RoleService  {
 
     private Role mapRole(RoleRepresentation roleRep) {
         Role role = new Role();
-        role.setRoleType(RoleType.valueOf(roleRep.getName().toUpperCase()));
+        role.setRoleType(RoleType.valueOf(roleRep.getName()));
         return role;
     }
 }

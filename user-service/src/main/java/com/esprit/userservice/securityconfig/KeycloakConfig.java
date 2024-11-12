@@ -21,14 +21,14 @@ public class KeycloakConfig {
             keycloak = KeycloakBuilder.builder()
                     .serverUrl("http://localhost:9090/")
                     .realm("whereToGo")
-                    .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
-
+                    .grantType(OAuth2Constants.PASSWORD)
+                    .username("super-admin")
+                    .password("superadmin")
                     .clientId("login-app")
-
-                    .clientSecret("KCkLConBOMbkIsOjEnWBmzokgUHE1hzn")
+                    .clientSecret("B8CNAMfaplvu1ng5FFn7MUnmcCetR4Yk")
 
                     .build();
-            keycloak.tokenManager().getAccessToken();
+
         }
         return keycloak;
     }

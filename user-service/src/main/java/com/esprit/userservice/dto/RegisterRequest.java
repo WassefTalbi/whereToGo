@@ -28,7 +28,6 @@ public class RegisterRequest {
     private String mobileNumber;
     @Email(message = "inavalid mail format")
     @NotBlank(message = "email is required and cannot be blank.")
-    @Column(unique = true)
     private String email;
 
     @NotNull(message = "Photo profile is required.")
