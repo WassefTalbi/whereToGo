@@ -17,10 +17,11 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "transport")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Transport {
     public enum TransportType {
-        BUS, TRUCK, VAN, TAXI
+        BUS, TRUCK, CAR, TAXI
     }
 
     @JsonIgnore
