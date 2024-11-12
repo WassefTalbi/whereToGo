@@ -113,6 +113,7 @@ public class UserService {
         user.setEmail(ownerRequest.getEmail());
         String photoName= fileService.uploadFile(ownerRequest.getLogo());
         user.setPhotoprofile(photoName);
+        user.setRole(role);
         user.setKeycloakId(userId);
         userRepository.save(user);
         roleService.getRole(RoleType.owner);
@@ -226,7 +227,7 @@ public class UserService {
         return agencies;
     }
     public List<User>findAllClient( ){
-        List<User> clients = userRepository.findByRoleRoleType(RoleType.owner);
+        List<User> clients = userRepository.findByRoleRoleType(RoleType.user);
         return clients;
     }
 

@@ -21,7 +21,7 @@ public class FileService {
             if (filename.contains("..")) {
                 throw new IllegalArgumentException("Cannot upload file with relative path outside current directory");
             }
-            Path uploadDir = Paths.get("src/main/resources/upload");
+            Path uploadDir = Paths.get("user-service/src/main/resources/upload");
             if (!Files.exists(uploadDir)) {
                 Files.createDirectories(uploadDir);
             }
