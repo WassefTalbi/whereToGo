@@ -13,7 +13,7 @@ public class Role {
     private Long id;
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
-    @ManyToMany(mappedBy = "roles")
+    @OneToMany(mappedBy = "role")
     private List<User> users;
 
 }

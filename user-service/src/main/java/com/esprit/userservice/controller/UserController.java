@@ -28,9 +28,7 @@ import java.util.Map;
 @RestController
 @Validated
 @RequestMapping("/user")
-
 @CrossOrigin("*")
-
 @RequiredArgsConstructor
 public class UserController {
 
@@ -43,10 +41,10 @@ public class UserController {
         return userService.getUserByEmail(email);
     }
     @GetMapping("/findById/{idUser}")
-    public User findUserById(@PathVariable(value = "idUser") Long idUser){
-        return userService.findUserById(idUser);
+    public User findUserById(@PathVariable(value = "idUser") String idUser){
+        return userService.findUserByIdKeycloak(idUser);
     }
-    @PostMapping("/register-Owner")
+    @PostMapping("/register-owner")
     public ResponseEntity<?> addOwner(  @ModelAttribute @Valid OwnerRequest ownerRequest){
 
         return new ResponseEntity<>(userService.createOwner(ownerRequest), HttpStatus.CREATED);
@@ -83,7 +81,7 @@ public class UserController {
         return userService.findAllClient();
     }
     @DeleteMapping("/delete/{idUser}")
-    public ResponseEntity<Map<String, String>> removeCategorie(@PathVariable Long idUser) {
+    public ResponseEntity<Map<String, String>> removeUser(@PathVariable Long idUser) {
         Map<String, String> response = new HashMap<>();
         try {
             userService.deleteUser(idUser);
@@ -117,7 +115,7 @@ public class UserController {
 
     @GetMapping("/image/{imageName}")
     public ResponseEntity<?> getImage(@PathVariable String imageName) {
-        Path imagePath = Paths.get("src/main/resources/upload").resolve(imageName);
+        Path imagePath = Paths.get("user-service/src/main/resources/upload").resolve(imageName);
         try {
             org.springframework.core.io.Resource resource = new UrlResource(imagePath.toUri());
             if (resource.exists() || resource.isReadable()) {
