@@ -1,38 +1,46 @@
 package com.esprit.etablissementservice.Entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.time.LocalDate;
+import java.util.List;
 @Entity
-@Table(name = "etablissement")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Etablissement {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String nom;
-    private String adresse;
+    private String title;
     private String type;
+    private int bedroom;
+    private int bathroom;
+    private int area;
+    private double price;
+    private String requirement;
+    private String location;
     private String image;
+    private LocalDate createDate;
+    private LocalDate updateDate;
+    private Double averageRating;
 
-    // Constructeurs, getters et setters
-
-    public Etablissement() {}
-
-    public Etablissement(String nom, String adresse, String type, String image) {
-        this.nom = nom;
-        this.adresse = adresse;
-        this.type = type;
-        this.image = image;
+    private String idOwner;
+    @ManyToMany
+    private List<Feature> features;
+    @PrePersist
+    public void prePersist() {
+        this.createDate = LocalDate.now();
+    }
+    @PreUpdate
+    public void preUpdate() {
+        this.updateDate = LocalDate.now();
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getNom() { return nom; }
-    public void setNom(String nom) { this.nom = nom; }
-    public String getAdresse() { return adresse; }
-    public void setAdresse(String adresse) { this.adresse = adresse; }
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
-    public String getImage() { return image; }
-    public void setImage(String image) { this.image = image; }
 }
