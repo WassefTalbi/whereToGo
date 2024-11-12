@@ -34,7 +34,7 @@ public class UserServiceApplication implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final Keycloak keycloakInstance = KeycloakConfig.getInstance();
-    private static final String REALM_NAME = "whereToGo";
+    private static final String REALM_NAME = "esprit";
     public static void main(String[] args) {
         SpringApplication.run(UserServiceApplication.class, args);
     }
@@ -59,13 +59,13 @@ public class UserServiceApplication implements CommandLineRunner {
             admin.setPassword("adminADMIN#1920");
             UserRepresentation userRep= mapUserRep(admin);
             Keycloak keycloak = KeycloakConfig.getInstance();
-            List<UserRepresentation> usernameRepresentations = keycloak.realm("whereToGo").users().searchByUsername(admin.getEmail(),true);
-            List<UserRepresentation> emailRepresentations = keycloak.realm("whereToGo").users().searchByEmail(admin.getEmail(),true);
+                List<UserRepresentation> usernameRepresentations = keycloak.realm("esprit").users().searchByUsername(admin.getEmail(),true);
+            List<UserRepresentation> emailRepresentations = keycloak.realm("esprit").users().searchByEmail(admin.getEmail(),true);
 
             if(!(usernameRepresentations.isEmpty() && emailRepresentations.isEmpty())){
                 throw new EmailExistsExecption("username or email already exists");
             }
-            Response response = keycloak.realm("whereToGo").users().create(userRep);
+            Response response = keycloak.realm("esprit").users().create(userRep);
 
 
             if (response.getStatus() != 201) {
