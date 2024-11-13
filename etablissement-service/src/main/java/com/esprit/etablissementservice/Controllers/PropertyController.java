@@ -25,7 +25,7 @@ public class EtablissementController {
         return new ResponseEntity<>(properties, HttpStatus.OK);
     }
     @GetMapping("/owner")
-    public ResponseEntity<?> getPropertiesByAgency(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<?> getPropertiesByOwner(@AuthenticationPrincipal Jwt jwt) {
         String idOwner = jwt.getSubject();
 
         return new ResponseEntity<>(propertyService.getPropertiesByAgency(idOwner), HttpStatus.OK);

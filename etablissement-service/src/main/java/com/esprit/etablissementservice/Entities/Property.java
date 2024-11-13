@@ -29,8 +29,6 @@ public class Etablissement {
     private String image;
     private LocalDate createDate;
     private LocalDate updateDate;
-    private Double averageRating;
-
     private String idOwner;
     @ManyToMany
     private List<Feature> features;
