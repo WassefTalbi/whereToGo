@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/evenement")
+@CrossOrigin("*")
 public class EvenementController {
     @Autowired
     private EventService sevent;
@@ -19,7 +20,7 @@ public class EvenementController {
     public Evenement addEvent(@RequestBody Evenement e){
         String image = e.getImage();
 
-        e.setImage(image.substring(12));
+        e.setImage("event.jpg");
         return sevent.addEvent(e);
 
     }

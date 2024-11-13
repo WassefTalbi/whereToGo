@@ -20,7 +20,7 @@ public class IpFilter implements Filter {
         String remoteAddr = httpRequest.getRemoteAddr();
         System.out.println("remoteAddr: " + remoteAddr);
 
-        String apiGatewayIp = "192.168.50.1";
+        String apiGatewayIp = "192.168.1.110";
 
         if (!(remoteAddr.equals(apiGatewayIp) )) {
 
