@@ -1,4 +1,4 @@
-package com.esprit.actualiteservice.securityconfig;
+package com.esprit.transportservice.securityconfig;
 
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.OAuth2Constants;
@@ -6,11 +6,11 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 
 
+
 @Slf4j
 public class KeycloakConfig {
 
-    private static Keycloak keycloak = null;
-
+    static Keycloak keycloak = null;
 
     public KeycloakConfig() {
     }
@@ -26,7 +26,9 @@ public class KeycloakConfig {
                     .password("superadmin")
                     .clientId("login-app")
                     .clientSecret("B8CNAMfaplvu1ng5FFn7MUnmcCetR4Yk")
+
                     .build();
+
         }
         return keycloak;
     }

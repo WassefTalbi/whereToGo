@@ -20,12 +20,12 @@ public class KeycloakConfig {
 
             keycloak = KeycloakBuilder.builder()
                     .serverUrl("http://localhost:9090/")
-                    .realm("esprit")
+                    .realm("whereToGo")
                     .grantType(OAuth2Constants.PASSWORD)
                     .username("super-admin")
                     .password("superadmin")
                     .clientId("login-app")
-                    .clientSecret("EdPhj4ipJKNbvJQM8dWHSMoQh3gjT5Hm")
+                    .clientSecret("B8CNAMfaplvu1ng5FFn7MUnmcCetR4Yk")
 
                     .build();
 

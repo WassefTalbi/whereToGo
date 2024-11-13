@@ -55,6 +55,7 @@ public class UserService {
     }
 
     public String register(RegisterRequest userDto) {
+
         UserRepresentation userRep= mapUserRep(userDto);
         Keycloak keycloak = KeycloakConfig.getInstance();
        List<UserRepresentation> usernameRepresentations = keycloak.realm("whereToGo").users().searchByUsername(userDto.getEmail(),true);
@@ -218,7 +219,7 @@ public class UserService {
 
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with email " + email));
+                .orElseThrow(() ->  new RuntimeException("User not found with email " + email));
     }
 
 
