@@ -1,4 +1,4 @@
-package com.esprit.actualiteservice.securityconfig;
+package com.esprit.transportservice.securityconfig;
 
 
 import jakarta.servlet.*;
@@ -10,7 +10,6 @@ public class IpFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        System.out.println("testing into the init of filter");
     }
 
     @Override
@@ -19,8 +18,11 @@ public class IpFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String remoteAddr = httpRequest.getRemoteAddr();
         System.out.println("remoteAddr: " + remoteAddr);
+
         String apiGatewayIp = "192.168.56.1";
+
         if (!(remoteAddr.equals(apiGatewayIp) )) {
+
             throw new ServletException("Direct access unauthorized");
         }
         chain.doFilter(request, response);
